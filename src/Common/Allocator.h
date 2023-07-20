@@ -84,7 +84,7 @@ public:
         try
         {
             checkSize(size);
-            freeNoTrack(buf, size);
+            freeNoTrack(buf);
             auto trace = CurrentMemoryTracker::free(size);
             trace.onFree(buf, size);
         }

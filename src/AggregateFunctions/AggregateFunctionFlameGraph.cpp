@@ -537,10 +537,10 @@ public:
 
     void add(AggregateDataPtr __restrict place, const IColumn ** columns, size_t row_num, Arena * arena) const override
     {
-        const auto * trace = typeid_cast<const ColumnArray *>(columns[0]);
+        const auto & trace = assert_cast<const ColumnArray &>(*columns[0]);
 
-        const auto & trace_offsets = trace->getOffsets();
-        const auto & trace_values = typeid_cast<const ColumnUInt64 *>(&trace->getData())->getData();
+        const auto & trace_offsets = trace.getOffsets();
+        const auto & trace_values = assert_cast<const ColumnUInt64 &>(&trace->getData()).getData();
         UInt64 prev_offset = 0;
         if (row_num)
             prev_offset = trace_offsets[row_num - 1];
@@ -549,14 +549,14 @@ public:
         Int64 allocated = 1;
         if (argument_types.size() >= 2)
         {
-            const auto & sizes = typeid_cast<const ColumnInt64 *>(columns[1])->getData();
+            const auto & sizes = assert_cast<const ColumnInt64 &>(*columns[1])->getData();
             allocated = sizes[row_num];
         }
 
         UInt64 ptr = 0;
         if (argument_types.size() >= 3)
         {
-            const auto & ptrs = typeid_cast<const ColumnUInt64 *>(columns[2])->getData();
+            const auto & ptrs = assert_cast<const ColumnUInt64 &>(*columns[2])->getData();
             ptr = ptrs[row_num];
         }
 
