@@ -221,8 +221,7 @@ void dumpFlameGraph(
     std::unordered_map<uintptr_t, size_t> mapping;
 
 #if defined(__ELF__) && !defined(OS_FREEBSD)
-    auto symbol_index_ptr = DB::SymbolIndex::instance();
-    const DB::SymbolIndex & symbol_index = *symbol_index_ptr;
+    const DB::SymbolIndex & symbol_index = DB::SymbolIndex::instance();
 #endif
 
     for (const auto & trace : traces)
@@ -540,7 +539,7 @@ public:
         const auto & trace = assert_cast<const ColumnArray &>(*columns[0]);
 
         const auto & trace_offsets = trace.getOffsets();
-        const auto & trace_values = assert_cast<const ColumnUInt64 &>(&trace.getData()).getData();
+        const auto & trace_values = assert_cast<const ColumnUInt64 &>(trace.getData()).getData();
         UInt64 prev_offset = 0;
         if (row_num)
             prev_offset = trace_offsets[row_num - 1];
